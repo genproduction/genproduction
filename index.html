@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gen Production — Top Up Robux via Group Payout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #14122B;
+    --surface: #1E1B3A;
+    --surface-2: #262048;
+    --border: #34305C;
+    --gold: #FFC93C;
+    --gold-dark: #7A5C0C;
+    --teal: #35D0BA;
+    --teal-dark: #0B4A41;
+    --text: #F5F3FF;
+    --text-muted: #A9A3C9;
+    --danger: #FF6B6B;
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    letter-spacing:0.2px;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+
+  /* NAV */
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 0;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .coin-mark{
+    width:38px;height:38px;border-radius:50%;
+    background:var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--gold-dark);font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;
+    flex-shrink:0;
+  }
+  .brand-name{font-size:20px;font-weight:600;}
+  .nav-badge{
+    font-size:12px;color:var(--teal);
+    background:var(--teal-dark);
+    padding:5px 12px;border-radius:20px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .nav-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--teal);}
+
+  /* HERO */
+  .hero{padding:56px 0 40px;text-align:center;}
+  .hero h1{font-size:clamp(30px,5vw,44px);margin:0 0 14px;line-height:1.15;}
+  .hero h1 .accent{color:var(--gold);}
+  .hero p{color:var(--text-muted);font-size:16px;max-width:520px;margin:0 auto 28px;}
+  .coin-stack{display:flex;justify-content:center;gap:8px;margin-bottom:30px;}
+  .coin-stack svg{display:block;}
+  .trust-row{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:8px;
+  }
+  .pill{
+    display:flex;align-items:center;gap:6px;
+    background:var(--surface);border:1px solid var(--border);
+    padding:8px 16px;border-radius:24px;font-size:13px;color:var(--text-muted);
+  }
+  .pill b{color:var(--text);font-weight:600;}
+
+  /* HOW IT WORKS */
+  .section{padding:44px 0;}
+  .section-head{margin-bottom:24px;}
+  .eyebrow{
+    font-size:12px;text-transform:uppercase;letter-spacing:1px;
+    color:var(--gold);font-weight:600;margin:0 0 6px;
+  }
+  .section h2{font-size:26px;margin:0;}
+  .section-sub{color:var(--text-muted);font-size:14px;margin-top:6px;max-width:520px;}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .step{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);padding:22px 18px;position:relative;
+  }
+  .step-num{
+    width:30px;height:30px;border-radius:8px;
+    background:var(--surface-2);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fredoka',sans-serif;font-weight:600;color:var(--gold);
+    font-size:14px;margin-bottom:12px;
+  }
+  .step h3{font-size:15px;margin:0 0 6px;}
+  .step p{font-size:13px;color:var(--text-muted);margin:0;}
+
+  .honesty-box{
+    margin-top:18px;background:var(--surface);border:1px solid var(--border);
+    border-left:3px solid var(--teal);border-radius:var(--radius);
+    padding:16px 18px;font-size:13px;color:var(--text-muted);
+  }
+  .honesty-box b{color:var(--text);}
+
+  /* PACKAGES */
+  .packages{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+  .pkg{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:18px;cursor:pointer;transition:border-color .15s;text-align:left;
+  }
+  .pkg:hover{border-color:var(--gold);}
+  .pkg.active{border-color:var(--gold);background:var(--surface-2);}
+  .pkg .rbx{font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;display:flex;align-items:center;gap:6px;}
+  .pkg .rbx .ic{width:16px;height:16px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+  .pkg .price{font-size:13px;color:var(--text-muted);margin-top:6px;}
+  .pkg .price b{color:var(--teal);font-weight:600;}
+
+  /* ORDER FORM */
+  .order-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:26px;
+  }
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:13px;color:var(--text-muted);margin-bottom:6px;}
+  .field input{
+    width:100%;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;
+    font-family:'Inter',sans-serif;
+  }
+  .field input:focus{outline:none;border-color:var(--gold);}
+  .summary{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 0;border-top:1px solid var(--border);margin-top:6px;
+  }
+  .summary .lbl{font-size:13px;color:var(--text-muted);}
+  .summary .val{font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:var(--gold);}
+  .cta-btn{
+    width:100%;background:var(--gold);color:#251C02;border:none;
+    padding:15px;border-radius:10px;font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:opacity .15s;
+  }
+  .cta-btn:hover{opacity:.9;}
+  .cta-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .form-note{font-size:12px;color:var(--text-muted);margin-top:12px;text-align:center;}
+
+  /* FOOTER DISCLOSURE */
+  .disclosure{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:20px 22px;font-size:13px;color:var(--text-muted);
+  }
+  .disclosure h3{font-size:14px;color:var(--text);margin:0 0 8px;}
+  .disclosure ul{margin:0;padding-left:18px;}
+  .disclosure li{margin-bottom:6px;}
+  footer{padding:30px 0 50px;text-align:center;color:var(--text-muted);font-size:12px;}
+
+  @media (max-width:640px){
+    .steps{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="nav">
+    <div class="brand">
+      <div class="coin-mark">R$</div>
+      <div class="brand-name">Gen Production</div>
+    </div>
+    <div class="nav-badge">Group payout resmi Roblox</div>
+  </div>
+</div>
+
+<div class="wrap hero">
+  <div class="coin-stack" aria-hidden="true">
+    <svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#FFC93C" stroke="#7A5C0C" stroke-width="2"/><text x="32" y="40" font-family="Fredoka" font-size="24" font-weight="700" fill="#7A5C0C" text-anchor="middle">R$</text></svg>
+  </div>
+  <h1>Top up Robux lewat <span class="accent">Group Payout</span> asli</h1>
+  <p>Tanpa login, tanpa password. Kamu cuma join komunitas Gen Production, dan Robux masuk lewat sistem payout resmi Roblox.</p>
+  <div class="trust-row">
+    <div class="pill"><b>100%</b>&nbsp;Group Payout</div>
+    <div class="pill"><b>Tanpa</b>&nbsp;login akun</div>
+    <div class="pill"><b>Manual</b>&nbsp;dicek admin</div>
+  </div>
+  <p style="margin-top:4px;"><a href="https://www.roblox.com/share/g/530630147" target="_blank" style="color:var(--gold);font-size:13px;font-weight:500;">Join komunitas Gen Production di Roblox &rarr;</a></p>
+</div>
+
+<div class="wrap section">
+  <div class="section-head">
+    <p class="eyebrow">Cara kerja</p>
+    <h2>3 langkah, semuanya bisa kamu cek sendiri</h2>
+    <p class="section-sub">Ini urutan aslinya — bukan animasi hiasan. Setiap langkah bisa kamu verifikasi lewat halaman grup Roblox.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Join komunitas Gen Production</h3>
+      <p>Klik link grup, join, dan pastikan role kamu sudah "Member" di halaman grup.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Pilih paket & isi username</h3>
+      <p>Pilih jumlah Robux, masukkan username Roblox kamu yang sudah join grup.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Admin proses payout</h3>
+      <p>Setelah pembayaran dicek, admin kirim lewat fitur Group Payout Roblox. Robux masuk ke akunmu, bukan ke pihak ketiga.</p>
+    </div>
+  </div>
+  <div class="honesty-box">
+    <b>Kenapa harus join komunitas dulu?</b> Group Payout adalah fitur resmi Roblox untuk membagikan Robux ke member grup. Kami mensyaratkan member sudah join minimal <b>14 hari</b> sebelum order — ini kebijakan kami sendiri untuk mencegah penyalahgunaan payout, bukan klaim otomatis dari sistem. Kamu bisa cek sendiri lama keanggotaanmu di halaman grup Roblox.
+  </div>
+</div>
+
+<div class="wrap section">
+  <div class="section-head">
+    <p class="eyebrow">Paket</p>
+    <h2>Pilih jumlah Robux</h2>
+  </div>
+  <div class="packages" id="packages"></div>
+</div>
+
+<div class="wrap section">
+  <div class="section-head">
+    <p class="eyebrow">Order</p>
+    <h2>Isi data pesanan</h2>
+    <p class="section-sub">Pesanan dikirim langsung ke admin dan diproses manual, biasanya 5–30 menit di jam aktif.</p>
+  </div>
+  <div class="order-card">
+    <div class="field">
+      <label for="username">Username Roblox (yang sudah join grup)</label>
+      <input type="text" id="username" placeholder="contoh: bulirjeruk123">
+    </div>
+    <div class="field">
+      <label for="discord">Username Discord kamu</label>
+      <input type="text" id="discord" placeholder="contoh: bulirjeruk#0001 atau bulirjeruk">
+    </div>
+    <div class="summary">
+      <span class="lbl">Paket dipilih</span>
+      <span class="val" id="selected-pkg">Belum pilih</span>
+    </div>
+    <button class="cta-btn" id="order-btn" disabled>Kirim pesanan</button>
+    <p class="form-note" id="form-status">Pesanan diproses manual oleh admin, biasanya 5–30 menit di jam aktif.</p>
+  </div>
+</div>
+
+<div class="wrap section">
+  <div class="disclosure">
+    <h3>Yang perlu kamu tahu</h3>
+    <ul>
+      <li>Kami tidak pernah minta password atau kode OTP akun Roblox kamu.</li>
+      <li>Kamu harus sudah join komunitas Gen Production minimal 14 hari sebelum order diproses.</li>
+      <li>Robux dikirim lewat fitur Group Payout resmi — silakan cek langsung di roblox.com/groups setelah transaksi.</li>
+      <li>Roblox memotong sekitar 30% dari nilai payout non-Premium; harga paket kami sudah memperhitungkan potongan ini.</li>
+      <li>Pembayaran dan pengiriman diproses manual oleh admin, bukan otomatis — mohon bersabar di luar jam aktif.</li>
+    </ul>
+  </div>
+</div>
+
+<footer>Gen Production · Reseller independen, bukan afiliasi resmi Roblox Corporation</footer>
+
+<script>
+  const PACKAGES = [
+    { rbx: 1000, price: 120000 },
+    { rbx: 2000, price: 240000 },
+    { rbx: 3000, price: 360000 },
+    { rbx: 4000, price: 480000 },
+    { rbx: 5000, price: 600000 },
+    { rbx: 10000, price: 1200000 }
+  ];
+
+  const GROUP_URL = "https://www.roblox.com/share/g/530630147";
+  const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1521680204345507901/-Rd-PuXoGJiE-KCuJNy2o6Trweu2txajq8NWwAGXbS1SaZTErcCnQCyI_oH87a8aJoBs";
+
+  const fmt = n => "Rp " + n.toLocaleString("id-ID");
+
+  const pkgContainer = document.getElementById("packages");
+  let selected = null;
+
+  PACKAGES.forEach((p, i) => {
+    const btn = document.createElement("button");
+    btn.className = "pkg";
+    btn.innerHTML = `
+      <div class="rbx"><span class="ic"></span>${p.rbx.toLocaleString("id-ID")} R$</div>
+      <div class="price">${fmt(p.price)}</div>
+    `;
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".pkg").forEach(el => el.classList.remove("active"));
+      btn.classList.add("active");
+      selected = p;
+      updateSummary();
+    });
+    pkgContainer.appendChild(btn);
+  });
+
+  const selectedLabel = document.getElementById("selected-pkg");
+  const orderBtn = document.getElementById("order-btn");
+  const usernameInput = document.getElementById("username");
+  const discordInput = document.getElementById("discord");
+  const statusNote = document.getElementById("form-status");
+
+  function updateSummary() {
+    if (selected) {
+      selectedLabel.textContent = `${selected.rbx.toLocaleString("id-ID")} R$ — ${fmt(selected.price)}`;
+    }
+    checkFormValid();
+  }
+
+  function checkFormValid() {
+    const valid = selected && usernameInput.value.trim().length > 2 && discordInput.value.trim().length > 2;
+    orderBtn.disabled = !valid;
+  }
+
+  usernameInput.addEventListener("input", checkFormValid);
+  discordInput.addEventListener("input", checkFormValid);
+
+  orderBtn.addEventListener("click", async () => {
+    if (!selected) return;
+    const username = usernameInput.value.trim();
+    const discord = discordInput.value.trim();
+
+    orderBtn.disabled = true;
+    orderBtn.textContent = "Mengirim...";
+    statusNote.textContent = "Sedang mengirim pesanan ke admin.";
+
+    const payload = {
+      embeds: [{
+        title: "Pesanan baru — Gen Production",
+        color: 16766524,
+        fields: [
+          { name: "Username Roblox", value: username, inline: true },
+          { name: "Username Discord", value: discord, inline: true },
+          { name: "Paket", value: `${selected.rbx.toLocaleString("id-ID")} R$`, inline: true },
+          { name: "Total", value: fmt(selected.price), inline: true }
+        ],
+        timestamp: new Date().toISOString()
+      }]
+    };
+
+    try {
+      const res = await fetch(DISCORD_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok || res.status === 204) {
+        statusNote.textContent = "Pesanan terkirim. Admin akan menghubungimu lewat Discord untuk konfirmasi pembayaran.";
+        orderBtn.textContent = "Terkirim";
+      } else {
+        const body = await res.text().catch(() => "");
+        console.error("Discord webhook error", res.status, body);
+        statusNote.textContent = `Pesanan gagal terkirim (kode ${res.status}). Buka console browser (F12) untuk detail, atau hubungi admin langsung.`;
+        orderBtn.textContent = "Kirim pesanan";
+        orderBtn.disabled = false;
+      }
+    } catch (err) {
+      console.error("Discord webhook fetch failed", err);
+      statusNote.textContent = "Pesanan gagal terkirim, kemungkinan diblokir browser (cek console F12) atau koneksi bermasalah. Coba lagi atau hubungi admin langsung.";
+      orderBtn.textContent = "Kirim pesanan";
+      orderBtn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
